@@ -5,9 +5,11 @@
 
 struct Expression 
 {
-  Token *operando1;
-  Token *operando2;
   Token *operador;
-};
+  Expression *left;
+  Expression *right;
+  Token *value;
 
+  Expression() : operador(nullptr), left(nullptr), right(nullptr), value(nullptr) {}
+};
 

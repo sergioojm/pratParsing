@@ -55,45 +55,54 @@ void Lexer::parse(const string input)
 Expression* Lexer::execute(float r_binding_power)
 {
 
-  Expression *expr = new Expression();
-  expr->operando1 = new Token(0.0f);
-  expr->operando2 = new Token(0.0f);
-  expr->operador = new Token('\0');
+  Token* lhs_token = this->tokens.next();
+  ASSERT_LEXER(lhs_token->isNum(), lhs_token->getNum() << " lhs is not a number");
 
-  Token* lhs = this->tokens.next();
-  ASSERT_LEXER(lhs->isNum(), lhs->getNum() << " lhs is not a number");
+  Expression* lhs = new Expression();
+  lhs->value = lhs_token;
 
-  expr->operando1 = lhs;
-
-  int isEof = 0;
-
-  while (isEof == 0 && this->tokens.getN() > 0)
+  while (true)
   {
 
-    Token* op = this->tokens.next();
-    if (op->getOperador() == '\0') { isEof = 1; break; }
-    ASSERT_LEXER(op->isOperador(), op->getOperador() << " is not an operator");
+    Token* op = this->tokens.peek();
+    if (op->getOperador() == '\0') { break; }
 
+    float* weights = this->getWeightBinding(op->getOperador());   
+    if (weights[0] < r_binding_power) { break; }
+
+
+    this->tokens.next(); // consumimos el operador
+
+    Expression* expr = new Expression();
+    expr->left = lhs;
     expr->operador = op;
-    float* weights = this->getWeightBinding(op->getOperador());
-   
-    if (weights[0] < r_binding_power)
-    {
-      break;
-    }
+    expr->right = this->execute(weights[1]);
 
-    Expression* rhs = execute(weights[1]);
-    ASSERT_LEXER(rhs->operando1->isNum(), rhs->operando1->getNum() << " rhs is not a number");
-    expr->operando2 = rhs->operando1;
-// rehacer la movida de la expression, en rhs te estas fumando el operando2
+    lhs = expr;
   }
 
-  cout << expr->operando1->getNum() << " " 
-       << expr->operador->getOperador() << " " 
-       << (expr->operando2 ? expr->operando2->getNum() : 0.0f) << endl;
-
-  return expr;
+  return lhs;
 }
+
+void Lexer::printExpr(Expression* expr)
+{
+
+  if (!expr) return;
+
+  if (expr->value)
+  {
+    cout << expr->value->getNum();
+  }
+  else
+  {
+    cout << "(";
+    printExpr(expr->left);
+    cout << " " << expr->operador->getOperador() << " ";
+    printExpr(expr->right);
+    cout << ")";
+  }
+}
+
 
 float* Lexer::getWeightBinding(char operador)
 {
@@ -120,9 +129,3 @@ float* Lexer::getWeightBinding(char operador)
 
   return result;
 }
-
-
-
-
-
-

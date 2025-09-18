@@ -23,6 +23,7 @@ class Lexer
     Token* peek();
     Token* next();
 
+    void printExpr(Expression* expr);
 
     Expression* execute(float r_binding_power = 0.0f);
 

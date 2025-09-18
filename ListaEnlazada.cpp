@@ -29,7 +29,7 @@ Token* ListaEnlazada::getValor(int posicion)
 Token* ListaEnlazada::peek() 
 {
   if (this->n == 0) return nullptr;
-  return getNodo(this->n - 1)->elemento;
+  return this->lista->elemento;
 }
 
 

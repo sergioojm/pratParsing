@@ -26,10 +26,11 @@ int main()
     Lexer* lex = new Lexer();
 
     lex->parse(expresion);
-    lex->execute();
+    lex->printExpr(lex->execute());
+    cout << endl;
   }
 
-
+  
 
   return 0;
 }
