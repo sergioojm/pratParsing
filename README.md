@@ -13,8 +13,8 @@ utilizando el algoritmo de prat parsing implementado en c++.
 - Paréntesis para agrupar operaciones
 
 
-[!warning]
-Esta herramienta está diseñada para analizar expresiones matemáticas simples y puede no manejar casos complejos, errores de sintaxes o números no enteros.
+> [!WARNING]
+> Esta herramienta está diseñada para analizar expresiones matemáticas simples y puede no manejar casos complejos, errores de sintaxes o números no enteros.
 
 ## Para compilar:
 
@@ -26,8 +26,8 @@ g++ main.cpp Lexer.cpp ListaEnlazada.cpp Token.cpp -o prat_parser
 ./prat_parser 
 ```
 
-[!tip] 
-Utiliza "exit" para salir del programa.
+> [!TIP] 
+> Utiliza "exit" para salir del programa.
 
 
 
