@@ -26,6 +26,9 @@ void Lexer::parse(const string input)
 
   while (*p != '\0')
   {
+    // se pueden eliminar los continue utilizando else if 
+
+
     if (*p == ' ') { p++; }
 
     if (*p >= '0' && *p <= '9')
