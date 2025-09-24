@@ -35,17 +35,22 @@ void Lexer::parse(const string input)
       this->tokens.insertar(this->tokens.getN(), new Token(num));
 
       while (*p >= '0' && *p <= '9') { p++; }
+      continue;
     }
 
     if (*p == '+' || 
         *p == '-' ||
         *p == '*' ||
-        *p == '/')
+        *p == '/' ||
+        *p == '(' ||
+        *p == ')')
     {
       this->tokens.insertar(this->tokens.getN(), new Token(*p));
       p++;
+      continue;
     }
-
+  
+    cout << "Invalid character: " << *p << endl;
     p++;
   }
 
@@ -55,17 +60,31 @@ void Lexer::parse(const string input)
 Expression* Lexer::execute(float r_binding_power)
 {
 
-  Token* lhs_token = this->tokens.next();
-  ASSERT_LEXER(lhs_token->isNum(), lhs_token->getNum() << " lhs is not a number");
-
   Expression* lhs = new Expression();
-  lhs->value = lhs_token;
+  
+  Token* lhs_token = this->tokens.next();
+ 
+  if (lhs_token->isNum())
+  {
+    lhs->value = lhs_token;
+  }
+  else if (lhs_token->getOperador() == '(') 
+  {
+    lhs = this->execute(0.0);
+    lhs_token = this->tokens.next();
+
+    if (lhs_token->getOperador() != ')') 
+    { 
+      cout << "bad token" << endl; 
+      return nullptr; 
+    }
+  }
 
   while (true)
   {
-
     Token* op = this->tokens.peek();
     if (op->getOperador() == '\0') { break; }
+    if (op->getOperador() == ')') { break; }
 
     float* weights = this->getWeightBinding(op->getOperador());   
     if (weights[0] < r_binding_power) { break; }
@@ -77,6 +96,8 @@ Expression* Lexer::execute(float r_binding_power)
     expr->left = lhs;
     expr->operador = op;
     expr->right = this->execute(weights[1]);
+
+    delete [] weights;
 
     lhs = expr;
   }
@@ -126,6 +147,7 @@ float* Lexer::getWeightBinding(char operador)
     result[0] = 2.0;
     result[1] = 2.1;
   }
+
 
   return result;
 }
