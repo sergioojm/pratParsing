@@ -29,5 +29,5 @@ g++ main.cpp Lexer.cpp ListaEnlazada.cpp Token.cpp -o prat_parser
 > [!TIP] 
 > Utiliza "exit" para salir del programa.
 
-
+[https://www.youtube.com/watch?v=0c8b7YfsBKs](Inspirado por este video)
 
