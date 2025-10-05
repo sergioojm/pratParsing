@@ -108,6 +108,46 @@ Expression* Lexer::execute(float r_binding_power)
   return lhs;
 }
 
+double Lexer::resolve(Expression* expr)
+{
+  if (!expr) return 0.0;
+
+  if (expr->value)
+  {
+    return expr->value->getNum();
+  }
+  else if (!expr->left && !expr->right)
+  {
+    cout << "nodo no tiene nada" << endl;
+    return 0.0;
+  }
+  else
+  {
+    double left = resolve(expr->left);
+    double right = resolve(expr->right);
+    char op = expr->operador->getOperador();
+
+    switch (op)
+    {
+      case '+': return left + right;
+      case '-': return left - right;
+      case '*': return left * right;
+      case '/': 
+        if (right == 0.0)
+        {
+          cout << "division by 0" << endl;
+          return 0.0;
+        }
+        return left / right;
+      case '(': return 0.0;
+      case ')': return 0.0;
+      default:
+        cout << "Unknown operator: " << op << endl;
+        return 0.0;
+    }
+  }
+}
+
 void Lexer::printExpr(Expression* expr)
 {
 

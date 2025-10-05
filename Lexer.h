@@ -24,7 +24,7 @@ class Lexer
     Token* next();
 
     void printExpr(Expression* expr);
-
+    double resolve(Expression* expr);
     Expression* execute(float r_binding_power = 0.0f);
 
 };

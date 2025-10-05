@@ -1,3 +1,4 @@
+#include "Expression.h"
 #include "Lexer.h"
 #include <iostream>
 
@@ -26,8 +27,11 @@ int main()
     Lexer* lex = new Lexer();
 
     lex->parse(expresion);
-    lex->printExpr(lex->execute());
+    Expression* expr = lex->execute();
+    lex->printExpr(expr);
+    cout << " -> " << lex->resolve(expr);
     cout << endl;
+    expresion = "";
   }
 
 // conchi  
