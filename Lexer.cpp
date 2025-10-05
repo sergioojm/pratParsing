@@ -67,6 +67,14 @@ Expression* Lexer::execute(float r_binding_power)
   
   Token* lhs_token = this->tokens.next();
  
+  if (!lhs_token->isNum() && lhs_token->getOperador() != '(')
+  {
+    cout << "Syntax Err" << endl;
+    delete lhs;
+    return nullptr;
+  }
+
+
   if (lhs_token->isNum())
   {
     lhs->value = lhs_token;
@@ -82,6 +90,7 @@ Expression* Lexer::execute(float r_binding_power)
       return nullptr; 
     }
   }
+
 
   while (true)
   {
